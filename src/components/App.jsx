@@ -21,7 +21,7 @@ const App = () => {
 
   const fetchImages = () => {
     const API_KEY = '40728450-e65c4b62446cf65c4bf21b685';
-    const url = https://pixabay.com/api/?key=${API_KEY}&q=${query}&page=${page}&per_page=12;
+    const url = `https://pixabay.com/api/?key=${API_KEY}&q=${query}&page=${page}&per_page=12;`;
 
     setIsLoading(true);
 
