@@ -12,6 +12,7 @@ class App extends Component {
     isLoading: false,
     showModal: false,
     largeImageUrl: '',
+    page: 1, // Додайте початкове значення для сторінки
   };
 
   handleSubmit = query => {
@@ -30,7 +31,6 @@ class App extends Component {
       .then(data => {
         this.setState(prevState => ({
           images: [...prevState.images, ...data.hits],
-          page: prevState.page + 1,
         }));
       })
       .finally(() => {
@@ -39,8 +39,16 @@ class App extends Component {
   };
 
   handleLoadMore = () => {
-    this.fetchImages();
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { query, page } = this.state;
+
+    if (prevState.page !== page) {
+      this.fetchImages();
+    }
+  }
 
   handleImageClick = largeImageUrl => {
     this.setState({ showModal: true, largeImageUrl });
