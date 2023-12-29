@@ -15,5 +15,8 @@ export const getImages = async (configParams) => {
     }
 
     const data = await response.json();
-    return data;
+    return {
+        hits: data.hits,
+        totalHits: data.totalHits,
+    };
 };

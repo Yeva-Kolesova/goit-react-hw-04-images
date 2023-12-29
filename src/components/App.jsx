@@ -13,11 +13,13 @@ const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [largeImageUrl, setLargeImageUrl] = useState('');
   const [page, setPage] = useState(1);
+  const [showBtn, setShowBtn] = useState(false);
 
   const handleSubmit = newQuery => {
     setQuery(newQuery);
     setImages([]);
     setPage(1);
+    setShowBtn(true);
   };
 
   const handleLoadMore = () => {
@@ -38,14 +40,13 @@ const App = () => {
       try {
         setIsLoading(true);
 
-        const { hits } =
-          query &&
-          (await getImages({
-            query,
-            page,
-          }));
+        const { hits, totalHits } = await getImages({
+          q: query,
+          page,
+        });
 
         setImages(prev => [...prev, ...hits]);
+        setShowBtn(page < Math.ceil(totalHits / 12));
       } catch (error) {
         console.log(error);
       } finally {
@@ -65,7 +66,7 @@ const App = () => {
         <ImageGallery images={images} onImageClick={handleImageClick} />
       )}
       {isLoading && <Loader />}
-      {images.length >= 12 && <Button onClick={handleLoadMore} />}
+      {showBtn && <Button onClick={handleLoadMore} />}
 
       {showModal && (
         <Modal largeImageURL={largeImageUrl} onClose={handleCloseModal} />
